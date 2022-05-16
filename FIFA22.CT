@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="42">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>0</ID>
+      <Description>"Camera"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+aobscanmodule(INJECT_uber_height,FIFA22.exe,F3 0F 11 57 04 F3 0F 58) // should be unique
+alloc(newmem,$1000,INJECT_uber_height)
+
+label(code_uber_height)
+label(return_uber_height)
+
+alloc(uber_height, 4, INJECT_uber_height)
+registersymbol(uber_height)
+uber_height:
+dd (float)5000
+
+alloc(uber_height_og, 16, INJECT_uber_height)
+registersymbol(uber_height_og)
+uber_height_og:
+dd (float)1
+dd (float)1
+dd (float)1
+dd (float)1
+
+newmem_uber_height:
+code_uber_height:
+  movups [uber_height_og],xmm2
+  movss xmm2,[uber_height]
+  movss [rdi+04],xmm2
+  movups xmm2,[uber_height_og]
+  jmp return_uber_height
+
+INJECT_uber_height:
+  jmp newmem_uber_height
+return_uber_height:
+registersymbol(INJECT_uber_height)
+
+aobscanmodule(INJECT_xOff,FIFA22.exe,F3 0F 11 57 04 F3 0F 58) // should be unique
+
+alloc(newmem_xOff,$1000,INJECT_xOff)
+
+label(code_xOff)
+label(return_xOff)
+
+alloc(x_offset, 4, INJECT_xOff)
+registersymbol(x_offset)
+x_offset:
+dd (float)2500
+
+alloc(og_xOff, 16, INJECT_xOff)
+registersymbol(og_xOff)
+
+newmem_xOff:
+code_xOff:
+movups [og_xOff],xmm2
+movss xmm2,[x_offset]
+movss [rdi],xmm2
+movups xmm2,[og_xOff]
+jmp return_xOff
+
+INJECT_xOff:
+jmp newmem_xOff
+return_xOff:
+registersymbol(INJECT_xOff)
+
+aobscanmodule(INJECT_uber_zoom,FIFA22.exe,F3 0F 11 5F 40 F3 0F 6F) // should be unique
+
+alloc(newmem_uber_zoom,$1000,INJECT_uber_zoom)
+
+label(code_uber_zoom)
+label(return_uber_zoom)
+
+alloc(uber_zoom, 4, INJECT_uber_zoom)
+registersymbol(uber_zoom)
+uber_zoom:
+dd (float)0.65
+
+alloc(uber_zoom_og, 16, INJECT_uber_zoom)
+registersymbol(uber_zoom_og)
+uber_zoom_og:
+dd (float)1
+dd (float)1
+dd (float)1
+dd (float)1
+
+  newmem_uber_zoom:
+  code_uber_zoom:
+movups [uber_zoom_og],xmm3
+movss xmm3,[uber_zoom]
+movss [rdi+40],xmm3
+movups xmm3,[uber_zoom_og]
+
+jmp return_uber_zoom
+
+INJECT_uber_zoom:
+jmp newmem_uber_zoom
+return_uber_zoom:
+registersymbol(INJECT_uber_zoom)
+
+[DISABLE]
+
+INJECT_uber_height:
+  db F3 0F 11 57 04
+
+unregistersymbol(INJECT_uber_height)
+dealloc(newmem_uber_height)
+dealloc(uber_height_og)
+dealloc(uber_height)
+
+INJECT_xOff:
+db F3 0F 11 57 04 F3 0F 58
+
+dealloc(x_offset)
+unregistersymbol(INJECT_xOff)
+dealloc(newmem_xOff)
+dealloc(og_xOff)
+
+INJECT_uber_zoom:
+  db F3 0F 11 5F 40
+
+dealloc(uber_zoom)
+unregistersymbol(INJECT_uber_zoom)
+dealloc(newmem_uber_zoom)
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>1</ID>
+          <Description>"x_offset"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>x_offset</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>2</ID>
+          <Description>"uber_height"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>uber_height</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>3</ID>
+          <Description>"uber_zoom"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>uber_zoom</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>4</ID>
+      <Description>"Match Intensity 3"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+aobscanmodule(nw,FIFA22.exe,74 69 6D 65 31 35 25 64 2C 20 74 69 6D 65 33 30 25 64 2C 20 74 69 6D 65 34 35 25 64 2C 20 74 69 6D 65 36 30 25 64 2C 20 74 69 6D 65 37 35 25 64 2C 20 74 69 6D 65 39 30 25 64 2C 20 74 69 6D 65 31 32 30 25 64) // should be unique
+
+Alloc(O_nw,69)
+
+registersymbol(O_nw)
+registersymbol(nw)
+
+
+O_nw:
+readmem(nw, 69)
+
+nw:
+db 20 20 20 20 20 33 25 64 2C 20 20 20 20 20 20 33 25 64 2C 20 20 20 20 20 20 33 25 64 2C 20 20 20 20 20 20 33 25 64 2C 20 20 20 20 20 20 33 25 64 2C 20 20 20 20 20 20 33 25 64 2C 20 20 20 20 20 20 20 33 25 64
+
+[DISABLE]
+nw:
+readmem(O_nw, 69)
+dealloc(O_nw)
+unregistersymbol(O_nw)
+unregistersymbol(nw)
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+</CheatTable>
