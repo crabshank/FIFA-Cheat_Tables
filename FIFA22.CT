@@ -6,39 +6,6 @@
       <Description>"Camera"</Description>
       <VariableType>Auto Assembler Script</VariableType>
       <AssemblerScript>[ENABLE]
-
-aobscanmodule(INJECT_uber_height,FIFA22.exe,F3 0F 11 57 04 F3 0F 58) // should be unique
-alloc(newmem,$1000,INJECT_uber_height)
-
-label(code_uber_height)
-label(return_uber_height)
-
-alloc(uber_height, 4, INJECT_uber_height)
-registersymbol(uber_height)
-uber_height:
-dd (float)5000
-
-alloc(uber_height_og, 16, INJECT_uber_height)
-registersymbol(uber_height_og)
-uber_height_og:
-dd (float)1
-dd (float)1
-dd (float)1
-dd (float)1
-
-newmem_uber_height:
-code_uber_height:
-  movups [uber_height_og],xmm2
-  movss xmm2,[uber_height]
-  movss [rdi+04],xmm2
-  movups xmm2,[uber_height_og]
-  jmp return_uber_height
-
-INJECT_uber_height:
-  jmp newmem_uber_height
-return_uber_height:
-registersymbol(INJECT_uber_height)
-
 aobscanmodule(INJECT_xOff,FIFA22.exe,F3 0F 11 57 04 F3 0F 58) // should be unique
 
 alloc(newmem_xOff,$1000,INJECT_xOff)
@@ -49,16 +16,45 @@ label(return_xOff)
 alloc(x_offset, 4, INJECT_xOff)
 registersymbol(x_offset)
 x_offset:
-dd (float)2500
+dd (float)-1500
+
+alloc(y_mult, 4, INJECT_xOff)
+registersymbol(y_mult)
+y_mult:
+dd (float)1
+
+alloc(z_offset, 4, INJECT_xOff)
+registersymbol(z_offset)
+z_offset:
+dd (float)13000
 
 alloc(og_xOff, 16, INJECT_xOff)
 registersymbol(og_xOff)
+alloc(og_xOff5, 16, INJECT_xOff)
+registersymbol(og_xOff5)
 
 newmem_xOff:
 code_xOff:
 movups [og_xOff],xmm2
+movups [og_xOff5],xmm5
+
 movss xmm2,[x_offset]
+//Overwrite x value
 movss [rdi],xmm2
+
+//Do yz offsets
+movss xmm2,[og_xOff]
+movss xmm5,[y_mult]
+mulss xmm2,xmm5
+movss [rdi+4],xmm2
+
+//Restore xmm5
+movups xmm5,[og_xOff5]
+
+movss xmm2,[z_offset]
+movss [rdi+8],xmm2
+
+//Restore xmm2
 movups xmm2,[og_xOff]
 jmp return_xOff
 
@@ -77,7 +73,7 @@ label(return_uber_zoom)
 alloc(uber_zoom, 4, INJECT_uber_zoom)
 registersymbol(uber_zoom)
 uber_zoom:
-dd (float)0.65
+dd (float)0.28
 
 alloc(uber_zoom_og, 16, INJECT_uber_zoom)
 registersymbol(uber_zoom_og)
@@ -103,28 +99,32 @@ registersymbol(INJECT_uber_zoom)
 
 [DISABLE]
 
-INJECT_uber_height:
-  db F3 0F 11 57 04
-
-unregistersymbol(INJECT_uber_height)
-dealloc(newmem_uber_height)
-dealloc(uber_height_og)
-dealloc(uber_height)
-
 INJECT_xOff:
 db F3 0F 11 57 04 F3 0F 58
 
 dealloc(x_offset)
-unregistersymbol(INJECT_xOff)
+dealloc(y_mult)
+dealloc(z_offset)
 dealloc(newmem_xOff)
 dealloc(og_xOff)
+dealloc(og_xOff5)
+
+unregistersymbol(og_xOff5)
+unregistersymbol(INJECT_xOff)
+unregistersymbol(x_offset)
+unregistersymbol(y_mult)
+unregistersymbol(z_offset)
+unregistersymbol(og_xOff)
 
 INJECT_uber_zoom:
   db F3 0F 11 5F 40
 
 dealloc(uber_zoom)
-unregistersymbol(INJECT_uber_zoom)
 dealloc(newmem_uber_zoom)
+
+unregistersymbol(uber_zoom)
+unregistersymbol(uber_zoom_og)
+unregistersymbol(INJECT_uber_zoom)
 </AssemblerScript>
       <CheatEntries>
         <CheatEntry>
@@ -135,11 +135,18 @@ dealloc(newmem_uber_zoom)
           <Address>x_offset</Address>
         </CheatEntry>
         <CheatEntry>
-          <ID>2</ID>
-          <Description>"uber_height"</Description>
+          <ID>8</ID>
+          <Description>"y_mult"</Description>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>Float</VariableType>
-          <Address>uber_height</Address>
+          <Address>y_mult</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>7</ID>
+          <Description>"z_offset"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>z_offset</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>3</ID>
@@ -148,13 +155,11 @@ dealloc(newmem_uber_zoom)
           <VariableType>Float</VariableType>
           <Address>uber_zoom</Address>
         </CheatEntry>
-      </CheatEntries>
-    </CheatEntry>
-    <CheatEntry>
-      <ID>4</ID>
-      <Description>"Match Intensity 3"</Description>
-      <VariableType>Auto Assembler Script</VariableType>
-      <AssemblerScript>[ENABLE]
+        <CheatEntry>
+          <ID>4</ID>
+          <Description>"Match Intensity 3"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
 aobscanmodule(nw,FIFA22.exe,74 69 6D 65 31 35 25 64 2C 20 74 69 6D 65 33 30 25 64 2C 20 74 69 6D 65 34 35 25 64 2C 20 74 69 6D 65 36 30 25 64 2C 20 74 69 6D 65 37 35 25 64 2C 20 74 69 6D 65 39 30 25 64 2C 20 74 69 6D 65 31 32 30 25 64) // should be unique
 
 Alloc(O_nw,69)
@@ -176,6 +181,8 @@ dealloc(O_nw)
 unregistersymbol(O_nw)
 unregistersymbol(nw)
 </AssemblerScript>
+        </CheatEntry>
+      </CheatEntries>
     </CheatEntry>
   </CheatEntries>
   <UserdefinedSymbols/>
