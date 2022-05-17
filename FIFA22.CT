@@ -155,11 +155,13 @@ unregistersymbol(INJECT_uber_zoom)
           <VariableType>Float</VariableType>
           <Address>uber_zoom</Address>
         </CheatEntry>
-        <CheatEntry>
-          <ID>4</ID>
-          <Description>"Match Intensity 3"</Description>
-          <VariableType>Auto Assembler Script</VariableType>
-          <AssemblerScript>[ENABLE]
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>4</ID>
+      <Description>"Match Intensity 3"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
 aobscanmodule(nw,FIFA22.exe,74 69 6D 65 31 35 25 64 2C 20 74 69 6D 65 33 30 25 64 2C 20 74 69 6D 65 34 35 25 64 2C 20 74 69 6D 65 36 30 25 64 2C 20 74 69 6D 65 37 35 25 64 2C 20 74 69 6D 65 39 30 25 64 2C 20 74 69 6D 65 31 32 30 25 64) // should be unique
 
 Alloc(O_nw,69)
@@ -181,8 +183,6 @@ dealloc(O_nw)
 unregistersymbol(O_nw)
 unregistersymbol(nw)
 </AssemblerScript>
-        </CheatEntry>
-      </CheatEntries>
     </CheatEntry>
   </CheatEntries>
   <UserdefinedSymbols/>
