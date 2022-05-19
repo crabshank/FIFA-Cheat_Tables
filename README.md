@@ -1,6 +1,6 @@
 # FIFA-Cheat_Tables
 
-### "Camera (with hotkeys)" keybindings:
+### "Camera (With hotkeys)" keybindings:
 
 * Left/Right Arrow - Decrease/Increase x_offset
 
