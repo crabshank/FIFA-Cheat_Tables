@@ -158,7 +158,7 @@ unregistersymbol(INJECT_uber_zoom)
       </CheatEntries>
     </CheatEntry>
     <CheatEntry>
-      <ID>22</ID>
+      <ID>23</ID>
       <Description>"Don't pause on focus loss"</Description>
       <VariableType>Auto Assembler Script</VariableType>
       <AssemblerScript>[ENABLE]
@@ -204,6 +204,241 @@ dealloc(O_nw)
 unregistersymbol(O_nw)
 unregistersymbol(nw)
 </AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>9</ID>
+      <Description>"Camera (With hotkeys)"</Description>
+      <Options moHideChildren="1"/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+aobscanmodule(INJECT_xOff_hk,FIFA22.exe,F3 0F 11 57 04 F3 0F 58) // should be unique
+
+alloc(newmem_xOff_hk,$1000,INJECT_xOff_hk)
+
+label(code_xOff_hk)
+label(return_xOff_hk)
+
+alloc(x_offset_hk, 4, INJECT_xOff_hk)
+registersymbol(x_offset_hk)
+x_offset_hk:
+dd (float)-1500
+
+alloc(y_mult_hk, 4, INJECT_xOff_hk)
+registersymbol(y_mult_hk)
+y_mult_hk:
+dd (float)1
+
+alloc(z_offset_hk, 4, INJECT_xOff_hk)
+registersymbol(z_offset_hk)
+z_offset_hk:
+dd (float)13000
+
+alloc(og_xOff_hk, 16, INJECT_xOff_hk)
+registersymbol(og_xOff_hk)
+alloc(og_xOff5_hk, 16, INJECT_xOff_hk)
+registersymbol(og_xOff5_hk)
+
+newmem_xOff_hk:
+code_xOff_hk:
+movups [og_xOff_hk],xmm2
+movups [og_xOff5_hk],xmm5
+
+movss xmm2,[x_offset_hk]
+//Overwrite x value
+movss [rdi],xmm2
+
+//Do yz offsets
+movss xmm2,[og_xOff_hk]
+movss xmm5,[y_mult_hk]
+mulss xmm2,xmm5
+movss [rdi+4],xmm2
+
+//Restore xmm5
+movups xmm5,[og_xOff5_hk]
+
+movss xmm2,[z_offset_hk]
+movss [rdi+8],xmm2
+
+//Restore xmm2
+movups xmm2,[og_xOff_hk]
+jmp return_xOff_hk
+
+INJECT_xOff_hk:
+jmp newmem_xOff_hk
+return_xOff_hk:
+registersymbol(INJECT_xOff_hk)
+
+aobscanmodule(INJECT_uber_zoom_hk,FIFA22.exe,F3 0F 11 5F 40 F3 0F 6F) // should be unique
+
+alloc(newmem_uber_zoom_hk,$1000,INJECT_uber_zoom_hk)
+
+label(code_uber_zoom_hk)
+label(return_uber_zoom_hk)
+
+alloc(uber_zoom_hk, 4, INJECT_uber_zoom_hk)
+registersymbol(uber_zoom_hk)
+uber_zoom_hk:
+dd (float)0.28
+
+alloc(uber_zoom_og_hk, 16, INJECT_uber_zoom_hk)
+registersymbol(uber_zoom_og_hk)
+uber_zoom_og_hk:
+dd (float)1
+dd (float)1
+dd (float)1
+dd (float)1
+
+  newmem_uber_zoom_hk:
+  code_uber_zoom_hk:
+movups [uber_zoom_og_hk],xmm3
+movss xmm3,[uber_zoom_hk]
+movss [rdi+40],xmm3
+movups xmm3,[uber_zoom_og_hk]
+
+jmp return_uber_zoom_hk
+
+INJECT_uber_zoom_hk:
+jmp newmem_uber_zoom_hk
+return_uber_zoom_hk:
+registersymbol(INJECT_uber_zoom_hk)
+
+[DISABLE]
+
+INJECT_xOff_hk:
+db F3 0F 11 57 04 F3 0F 58
+
+dealloc(x_offset_hk)
+dealloc(y_mult_hk)
+dealloc(z_offset_hk)
+dealloc(newmem_xOff_hk)
+dealloc(og_xOff_hk)
+dealloc(og_xOff5_hk)
+
+unregistersymbol(og_xOff5_hk)
+unregistersymbol(INJECT_xOff_hk)
+unregistersymbol(x_offset_hk)
+unregistersymbol(y_mult_hk)
+unregistersymbol(z_offset_hk)
+unregistersymbol(og_xOff_hk)
+
+INJECT_uber_zoom_hk:
+  db F3 0F 11 5F 40
+
+dealloc(uber_zoom_hk)
+dealloc(newmem_uber_zoom_hk)
+
+unregistersymbol(uber_zoom_hk)
+unregistersymbol(uber_zoom_og_hk)
+unregistersymbol(INJECT_uber_zoom_hk)
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>10</ID>
+          <Description>"x_offset"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>x_offset_hk</Address>
+          <Hotkeys>
+            <Hotkey>
+              <Action>Increase Value</Action>
+              <Keys>
+                <Key>39</Key>
+              </Keys>
+              <Value>50</Value>
+              <ID>0</ID>
+            </Hotkey>
+            <Hotkey>
+              <Action>Decrease Value</Action>
+              <Keys>
+                <Key>37</Key>
+              </Keys>
+              <Value>50</Value>
+              <ID>1</ID>
+            </Hotkey>
+          </Hotkeys>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>11</ID>
+          <Description>"y_mult"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>y_mult_hk</Address>
+          <Hotkeys>
+            <Hotkey>
+              <Action>Increase Value</Action>
+              <Keys>
+                <Key>38</Key>
+              </Keys>
+              <Value>0.05</Value>
+              <ID>0</ID>
+            </Hotkey>
+            <Hotkey>
+              <Action>Decrease Value</Action>
+              <Keys>
+                <Key>40</Key>
+              </Keys>
+              <Value>0.05</Value>
+              <ID>1</ID>
+            </Hotkey>
+          </Hotkeys>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>12</ID>
+          <Description>"z_offset"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>z_offset_hk</Address>
+          <Hotkeys>
+            <Hotkey>
+              <Action>Decrease Value</Action>
+              <Keys>
+                <Key>16</Key>
+                <Key>37</Key>
+              </Keys>
+              <Value>200</Value>
+              <ID>0</ID>
+            </Hotkey>
+            <Hotkey>
+              <Action>Increase Value</Action>
+              <Keys>
+                <Key>16</Key>
+                <Key>39</Key>
+              </Keys>
+              <Value>200</Value>
+              <ID>1</ID>
+            </Hotkey>
+          </Hotkeys>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>13</ID>
+          <Description>"uber_zoom"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>uber_zoom_hk</Address>
+          <Hotkeys>
+            <Hotkey>
+              <Action>Decrease Value</Action>
+              <Keys>
+                <Key>17</Key>
+                <Key>16</Key>
+                <Key>38</Key>
+              </Keys>
+              <Value>0.05</Value>
+              <ID>0</ID>
+            </Hotkey>
+            <Hotkey>
+              <Action>Increase Value</Action>
+              <Keys>
+                <Key>17</Key>
+                <Key>16</Key>
+                <Key>40</Key>
+              </Keys>
+              <Value>0.05</Value>
+              <ID>1</ID>
+            </Hotkey>
+          </Hotkeys>
+        </CheatEntry>
+      </CheatEntries>
     </CheatEntry>
   </CheatEntries>
   <UserdefinedSymbols/>
